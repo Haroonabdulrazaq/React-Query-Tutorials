@@ -1,28 +1,39 @@
-import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useState } from 'react';
+import { useSuperHeroesData } from '../Hooks/useSuperHeroesData';
+
+const initialState = 3000;
 
 export const RQSuperHeroesPage = () => {
-  const fetchSuperHeroes = () => axios.get('http://localhost:4000/superheroes');
-  const { isLoading, data, isError, error, isFetching, refetch } = useQuery({
-    queryKey: ['super-heroes'],
-    queryFn: fetchSuperHeroes,
-    refetchInterval: 3000,
+  const [fetchTime, setFetchTime] = useState(initialState);
 
-    // cacheTime: 5000, // Default: 5min,The number of secs, it will hold the data before it's Garbage collected
-    // staleTime: 3000, // Default: 0, The number of seconds the data is fresh before the data becomes stale
-    // refetchOnMount: false, // Options: true, false, always
-    // enabled: false,
-  });
+  const onSuccess = (data) => {
+    console.log('Perform this action on successs', data);
+    if (data.length === 4) {
+      setFetchTime(0);
+    } else {
+      setFetchTime(initialState);
+    }
+  };
+
+  const onError = (error) => {
+    console.log('Perform this action on error', error);
+    setFetchTime(0);
+  };
+
+  const { isLoading, data, isError, error, isFetching } = useSuperHeroesData(
+    onSuccess,
+    onError,
+    fetchTime
+  );
 
   if (isLoading || isFetching) return <h2>Loading...</h2>;
   if (isError) return <h2>{error.message}</h2>;
   return (
     <>
       <h2>React Query Super Heroes Page</h2>
-      <button onClick={refetch}>Fetch heroes</button>
       <div>
-        {data?.data.map((hero) => {
-          return <div key={hero.id}>{hero.name}</div>;
+        {data.map((heroName) => {
+          return <div key={heroName}>{heroName}</div>;
         })}
       </div>
     </>

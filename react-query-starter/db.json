@@ -14,6 +14,11 @@
       "id": 3,
       "name": "Wonder Woman 007",
       "alterEgo": "Princess Diana"
+    },
+    {
+      "id": 4,
+      "name": "Black Panther",
+      "alterEgo": "Chadwick Bossman"
     }
   ]
 }
