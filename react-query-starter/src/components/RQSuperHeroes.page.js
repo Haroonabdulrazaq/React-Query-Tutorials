@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSuperHeroesData } from '../Hooks/useSuperHeroesData';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 const initialState = 3000;
 
@@ -7,7 +8,7 @@ export const RQSuperHeroesPage = () => {
   const [fetchTime, setFetchTime] = useState(initialState);
 
   const onSuccess = (data) => {
-    console.log('Perform this action on successs', data);
+    console.log('Perform this action on successs');
     if (data.length === 4) {
       setFetchTime(0);
     } else {
@@ -32,8 +33,12 @@ export const RQSuperHeroesPage = () => {
     <>
       <h2>React Query Super Heroes Page</h2>
       <div>
-        {data.map((heroName) => {
-          return <div key={heroName}>{heroName}</div>;
+        {data?.data.map((hero) => {
+          return (
+            <div key={hero.id}>
+              <Link to={`rq-super-heroes/${hero.id}`}>{hero.name}</Link>
+            </div>
+          );
         })}
       </div>
     </>
