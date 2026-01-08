@@ -1,6 +1,19 @@
-import React from 'react';
+import axios from 'axios';
+import { useQueries } from 'react-query';
 
-const DynamicParallel = () => {
+const fetchSuperHeroes = (heroId) => {
+  return axios.get(`http://localhost:4000/superheroes/${heroId}`);
+};
+
+const DynamicParallel = ({ heroIds }) => {
+  const queryResult = useQueries(
+    heroIds.map((id) => {
+      return {
+        queryKey: ['super-heroes', id],
+        queryFn: () => fetchSuperHeroes(id),
+      };
+    })
+  );
   return <div>DynamicParallel</div>;
 };
 
